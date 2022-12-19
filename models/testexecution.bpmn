@@ -10,7 +10,7 @@
     <bpmn:startEvent id="StartEvent_1" name="Test Execution triggered">
       <bpmn:outgoing>Flow_1ubfh5j</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:receiveTask id="Activity_1x0oye9" name="Publish Test Result">
+    <bpmn:receiveTask id="Activity_1x0oye9" name="Publish Test Result" messageRef="Message_38mlauq">
       <bpmn:incoming>Flow_0s3m7jl</bpmn:incoming>
       <bpmn:outgoing>Flow_00e84s4</bpmn:outgoing>
     </bpmn:receiveTask>
@@ -25,6 +25,7 @@
     <bpmn:sequenceFlow id="Flow_0s3m7jl" sourceRef="Activity_1bb06s5" targetRef="Activity_1x0oye9" />
     <bpmn:sequenceFlow id="Flow_00e84s4" sourceRef="Activity_1x0oye9" targetRef="Event_00ej23f" />
   </bpmn:process>
+  <bpmn:message id="Message_38mlauq" name="test_case_finished" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0bkrncn">
       <bpmndi:BPMNShape id="Participant_1q5t3lr_di" bpmnElement="Participant_1q5t3lr" isHorizontal="true">
