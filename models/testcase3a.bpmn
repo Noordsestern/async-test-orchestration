@@ -20,87 +20,78 @@
         <bpmn:flowNodeRef>Event_1mqw6nz</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0fn5o1r</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Gateway_0ghf2o7</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1no255b</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Event_1p7ra7l</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_175rnl8</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Event_1no255b</bpmn:flowNodeRef>
         <bpmn:childLaneSet id="LaneSet_0k1u9g1" />
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:endEvent id="Event_1q2d9vp" name="Test finished">
-      <bpmn:incoming>Flow_0n2asaa</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1msldh9" />
-    </bpmn:endEvent>
-    <bpmn:endEvent id="Event_0iezsg8" name="Test aborted">
-      <bpmn:incoming>Flow_1j9roge</bpmn:incoming>
-      <bpmn:incoming>Flow_03theaa</bpmn:incoming>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_0e3urgw" />
-    </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0xe5f6y" name="Send Request to 3rd Party API" camunda:type="external" camunda:topic="send_api_call">
-      <bpmn:incoming>Flow_0rd9yak</bpmn:incoming>
-      <bpmn:outgoing>Flow_0gh0r24</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0p51qnw" name="Validate Result in WebUI" camunda:type="external" camunda:topic="validate_result">
-      <bpmn:incoming>Flow_0gh0r24</bpmn:incoming>
-      <bpmn:incoming>Flow_0f12vjx</bpmn:incoming>
-      <bpmn:outgoing>Flow_0n2asaa</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:userTask id="Activity_15en776" name="Evaluate test state">
-      <bpmn:incoming>Flow_0fsp3sx</bpmn:incoming>
-      <bpmn:outgoing>Flow_0f12vjx</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:serviceTask id="Activity_1d4fm83" name="Generate  Test Data" camunda:type="external" camunda:topic="create_test_data">
-      <bpmn:incoming>Flow_136zh1t</bpmn:incoming>
-      <bpmn:outgoing>Flow_1jsvbm9</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:startEvent id="Event_1mqw6nz" name="Test started">
-      <bpmn:outgoing>Flow_1mup498</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1joof4s" />
-    </bpmn:startEvent>
-    <bpmn:exclusiveGateway id="Gateway_0fn5o1r">
-      <bpmn:incoming>Flow_1mup498</bpmn:incoming>
-      <bpmn:outgoing>Flow_136zh1t</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1v0ywqw</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0n2asaa" sourceRef="Activity_0p51qnw" targetRef="Event_1q2d9vp" />
+    <bpmn:sequenceFlow id="Flow_0rd9yak" sourceRef="Gateway_0ghf2o7" targetRef="Activity_0xe5f6y" />
+    <bpmn:sequenceFlow id="Flow_0gh0r24" sourceRef="Activity_0xe5f6y" targetRef="Activity_0p51qnw" />
+    <bpmn:sequenceFlow id="Flow_0f12vjx" name="Retry" sourceRef="Activity_15en776" targetRef="Activity_0p51qnw" />
+    <bpmn:sequenceFlow id="Flow_136zh1t" name="No test data" sourceRef="Gateway_0fn5o1r" targetRef="Activity_1d4fm83" />
+    <bpmn:sequenceFlow id="Flow_1jsvbm9" sourceRef="Activity_1d4fm83" targetRef="Gateway_0ghf2o7" />
+    <bpmn:sequenceFlow id="Flow_1mup498" sourceRef="Event_1mqw6nz" targetRef="Gateway_0fn5o1r" />
+    <bpmn:sequenceFlow id="Flow_1v0ywqw" name="Test data provided" sourceRef="Gateway_0fn5o1r" targetRef="Gateway_0ghf2o7" />
     <bpmn:exclusiveGateway id="Gateway_0ghf2o7">
       <bpmn:incoming>Flow_1jsvbm9</bpmn:incoming>
       <bpmn:incoming>Flow_1v0ywqw</bpmn:incoming>
       <bpmn:outgoing>Flow_0rd9yak</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:boundaryEvent id="Event_1no255b" attachedToRef="Activity_0p51qnw">
-      <bpmn:outgoing>Flow_0fsp3sx</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_0wtmvc8">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15M</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
-    <bpmn:boundaryEvent id="Event_1p7ra7l" name="3 days" attachedToRef="Activity_15en776">
-      <bpmn:outgoing>Flow_1j9roge</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_1ao7su2">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">P3D</bpmn:timeDuration>
-      </bpmn:timerEventDefinition>
-    </bpmn:boundaryEvent>
+    <bpmn:exclusiveGateway id="Gateway_0fn5o1r">
+      <bpmn:incoming>Flow_1mup498</bpmn:incoming>
+      <bpmn:outgoing>Flow_136zh1t</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1v0ywqw</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:startEvent id="Event_1mqw6nz" name="Test started">
+      <bpmn:outgoing>Flow_1mup498</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1joof4s" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_1d4fm83" name="Generate  Test Data" camunda:type="external" camunda:topic="create_test_data">
+      <bpmn:incoming>Flow_136zh1t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jsvbm9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_15en776" name="Evaluate test state">
+      <bpmn:incoming>Flow_1cx6o0r</bpmn:incoming>
+      <bpmn:outgoing>Flow_0f12vjx</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_0p51qnw" name="Validate Result in WebUI" camunda:type="external" camunda:topic="validate_result">
+      <bpmn:incoming>Flow_0gh0r24</bpmn:incoming>
+      <bpmn:incoming>Flow_0f12vjx</bpmn:incoming>
+      <bpmn:outgoing>Flow_0n2asaa</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0xe5f6y" name="Send Request to 3rd Party API" camunda:type="external" camunda:topic="send_api_call">
+      <bpmn:incoming>Flow_0rd9yak</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gh0r24</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1q2d9vp" name="Test finished">
+      <bpmn:incoming>Flow_0n2asaa</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1msldh9" />
+    </bpmn:endEvent>
+    <bpmn:endEvent id="Event_0iezsg8" name="Test aborted">
+      <bpmn:incoming>Flow_03theaa</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0e3urgw" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_03theaa" name="Cancelled" sourceRef="Event_175rnl8" targetRef="Event_0iezsg8" />
     <bpmn:boundaryEvent id="Event_175rnl8" attachedToRef="Activity_15en776">
       <bpmn:outgoing>Flow_03theaa</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1s2vb74" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0n2asaa" sourceRef="Activity_0p51qnw" targetRef="Event_1q2d9vp" />
-    <bpmn:sequenceFlow id="Flow_1j9roge" name="Timeout" sourceRef="Event_1p7ra7l" targetRef="Event_0iezsg8" />
-    <bpmn:sequenceFlow id="Flow_03theaa" name="Cancelled" sourceRef="Event_175rnl8" targetRef="Event_0iezsg8" />
-    <bpmn:sequenceFlow id="Flow_0rd9yak" sourceRef="Gateway_0ghf2o7" targetRef="Activity_0xe5f6y" />
-    <bpmn:sequenceFlow id="Flow_0gh0r24" sourceRef="Activity_0xe5f6y" targetRef="Activity_0p51qnw" />
-    <bpmn:sequenceFlow id="Flow_0f12vjx" name="Retry" sourceRef="Activity_15en776" targetRef="Activity_0p51qnw" />
-    <bpmn:sequenceFlow id="Flow_0fsp3sx" name="15 minutes" sourceRef="Event_1no255b" targetRef="Activity_15en776" />
-    <bpmn:sequenceFlow id="Flow_136zh1t" name="No test data" sourceRef="Gateway_0fn5o1r" targetRef="Activity_1d4fm83" />
-    <bpmn:sequenceFlow id="Flow_1jsvbm9" sourceRef="Activity_1d4fm83" targetRef="Gateway_0ghf2o7" />
-    <bpmn:sequenceFlow id="Flow_1mup498" sourceRef="Event_1mqw6nz" targetRef="Gateway_0fn5o1r" />
-    <bpmn:sequenceFlow id="Flow_1v0ywqw" name="Test data provided" sourceRef="Gateway_0fn5o1r" targetRef="Gateway_0ghf2o7" />
+    <bpmn:sequenceFlow id="Flow_1cx6o0r" name="15 minutes" sourceRef="Event_1no255b" targetRef="Activity_15en776" />
+    <bpmn:boundaryEvent id="Event_1no255b" attachedToRef="Activity_0p51qnw">
+      <bpmn:outgoing>Flow_1cx6o0r</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0wtmvc8">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15M</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:boundaryEvent>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_0syhvwy">
       <bpmndi:BPMNShape id="Participant_0ysh2h5_di" bpmnElement="Participant_0ysh2h5" isHorizontal="true">
-        <dc:Bounds x="160" y="270" width="900" height="310" />
+        <dc:Bounds x="160" y="270" width="820" height="310" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Lane_05i0lw6_di" bpmnElement="Lane_05i0lw6" isHorizontal="true">
-        <dc:Bounds x="190" y="270" width="870" height="310" />
+        <dc:Bounds x="190" y="270" width="790" height="310" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1gmi3ml_di" bpmnElement="Event_1q2d9vp">
         <dc:Bounds x="902" y="327" width="36" height="36" />
@@ -111,7 +102,7 @@
       <bpmndi:BPMNShape id="Event_09nx04i_di" bpmnElement="Event_0iezsg8">
         <dc:Bounds x="902" y="482" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="949" y="493" width="61" height="14" />
+          <dc:Bounds x="889" y="523" width="61" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0htbs1n_di" bpmnElement="Activity_0xe5f6y">
@@ -139,63 +130,37 @@
       <bpmndi:BPMNShape id="Gateway_0ghf2o7_di" bpmnElement="Gateway_0ghf2o7" isMarkerVisible="true">
         <dc:Bounds x="435" y="320" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0aarqaw_di" bpmnElement="Event_1no255b">
-        <dc:Bounds x="702" y="367" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1o8by10_di" bpmnElement="Event_1p7ra7l">
-        <dc:Bounds x="772" y="522" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="774" y="565" width="33" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0cisipn_di" bpmnElement="Event_175rnl8">
-        <dc:Bounds x="772" y="442" width="36" height="36" />
+        <dc:Bounds x="772" y="482" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0aarqaw_di" bpmnElement="Event_1no255b">
+        <dc:Bounds x="752" y="367" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0n2asaa_di" bpmnElement="Flow_0n2asaa">
         <di:waypoint x="790" y="345" />
         <di:waypoint x="902" y="345" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1j9roge_di" bpmnElement="Flow_1j9roge">
-        <di:waypoint x="808" y="540" />
-        <di:waypoint x="920" y="540" />
-        <di:waypoint x="920" y="518" />
+      <bpmndi:BPMNEdge id="Flow_03theaa_di" bpmnElement="Flow_03theaa">
+        <di:waypoint x="808" y="500" />
+        <di:waypoint x="902" y="500" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="844" y="522" width="40" height="14" />
+          <dc:Bounds x="831" y="482" width="49" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_03theaa_di" bpmnElement="Flow_03theaa">
-        <di:waypoint x="808" y="460" />
-        <di:waypoint x="920" y="460" />
-        <di:waypoint x="920" y="482" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="840" y="442" width="49" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNEdge id="Flow_0rd9yak_di" bpmnElement="Flow_0rd9yak">
+        <di:waypoint x="485" y="345" />
+        <di:waypoint x="510" y="345" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0gh0r24_di" bpmnElement="Flow_0gh0r24">
         <di:waypoint x="610" y="345" />
         <di:waypoint x="690" y="345" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0f12vjx_di" bpmnElement="Flow_0f12vjx">
-        <di:waypoint x="760" y="460" />
-        <di:waypoint x="760" y="385" />
+        <di:waypoint x="700" y="460" />
+        <di:waypoint x="700" y="385" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="776" y="418" width="27" height="14" />
+          <dc:Bounds x="666" y="418" width="27" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0fsp3sx_di" bpmnElement="Flow_0fsp3sx">
-        <di:waypoint x="720" y="403" />
-        <di:waypoint x="720" y="460" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="652" y="418" width="55" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1mup498_di" bpmnElement="Flow_1mup498">
-        <di:waypoint x="238" y="345" />
-        <di:waypoint x="285" y="345" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0rd9yak_di" bpmnElement="Flow_0rd9yak">
-        <di:waypoint x="485" y="345" />
-        <di:waypoint x="510" y="345" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_136zh1t_di" bpmnElement="Flow_136zh1t">
         <di:waypoint x="310" y="370" />
@@ -210,11 +175,22 @@
         <di:waypoint x="460" y="450" />
         <di:waypoint x="460" y="370" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mup498_di" bpmnElement="Flow_1mup498">
+        <di:waypoint x="238" y="345" />
+        <di:waypoint x="285" y="345" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1v0ywqw_di" bpmnElement="Flow_1v0ywqw">
         <di:waypoint x="335" y="345" />
         <di:waypoint x="435" y="345" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="340" y="327" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cx6o0r_di" bpmnElement="Flow_1cx6o0r">
+        <di:waypoint x="770" y="403" />
+        <di:waypoint x="770" y="460" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="782" y="413" width="55" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Participant_0vv46yf_di" bpmnElement="Participant_0swil0i" isHorizontal="true">
