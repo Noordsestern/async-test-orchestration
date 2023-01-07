@@ -6,7 +6,10 @@ ${TEST_DATA}
 Test Device Creation
     Generate Test Data If Not Available
     Send Test Data Request to API
-    Wait Until Keyword Succeeds   3x    5 min   Validate Result in WebUI   
+    Wait Until Keyword Succeeds
+    ...   3x
+    ...   5 min
+    ...   Validate Result in WebUI   
 
 
 *** Keywords ***

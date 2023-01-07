@@ -1,0 +1,62 @@
+{
+  "components": [
+    {
+      "label": "Energy Metering Device ID",
+      "type": "textfield",
+      "id": "Field_0y5prec",
+      "key": "metering_device_id",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "values": [
+        {
+          "label": "Energy Consumption Only",
+          "value": "c"
+        },
+        {
+          "label": "Energy Consumption & Production",
+          "value": "cp"
+        },
+        {
+          "label": "Energy Production Only",
+          "value": "p"
+        }
+      ],
+      "label": "Device Type",
+      "type": "select",
+      "id": "Field_0zlj2cl",
+      "key": "device_type",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Address",
+      "type": "textfield",
+      "id": "Field_09sdac6",
+      "key": "address",
+      "description": "Address where metering device is going to be installed",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Test Execution ID",
+      "type": "textfield",
+      "id": "Field_0d93z1i",
+      "key": "test_execution_id",
+      "description": "Identify the test case during and after execution"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0wxokaw",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.6.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.18.0",
+  "schemaVersion": 5
+}
